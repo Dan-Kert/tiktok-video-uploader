@@ -1,0 +1,58 @@
+# TikTok Uploader Default Configuration File
+
+quit_on_end = true
+
+# Messing around with inputs
+valid_path_names = ["path", "filename", "video", "video_path"]
+valid_descriptions = ["description", "desc", "caption"]
+
+# Playwright Waits
+implicit_wait = 30  # seconds
+explicit_wait = 60 # seconds
+uploading_wait = 180 # seconds
+captcha_wait = 300 # seconds
+
+# Wait time between adding hashtags
+add_hashtag_wait = 5 # seconds
+
+supported_file_types = ["mp4", "mov", "avi", "wmv", "flv", "webm", "mkv", "m4v", "3gp", "3g2", "gif"]
+# supported_image_file_types removed (cover support removed)
+
+# max_description_length removed; not enforced by uploader
+
+[paths]
+main = "https://www.tiktok.com/"
+login = "https://www.tiktok.com/login/phone-or-email/email"
+upload = "https://www.tiktok.com/creator-center/upload?lang=en"
+
+[disguising]
+user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+
+[selectors] # Playwright XPATH selectors
+
+	[selectors.login]
+	username_field = "//input[@name=\"username\"]"
+	password_field = "//input[@type=\"password\"]"
+	login_button = "//button[@type=\"submit\"]"
+	
+	alert_user_if_failed = true # sends an alert and waits instead of failing
+	
+	cookie_of_interest = "sessionid" # cookie to check if login was successful
+	
+	[selectors.upload]
+	split_window = "//button[./div[text()='Not now']]"
+	upload_video = "//input[@type='file']"
+	upload_finished = "//div[contains(@class, 'btn-cancel')]"
+	process_confirmation = "//div[@contenteditable='true' and @role='combobox' and contains(@class, 'public-DraftEditor-content')] | //div[@contenteditable='true' and @role='textbox'] | //div[contains(@class, 'caption-editor')]"
+	description = "//div[@contenteditable='true' and @role='combobox' and contains(@class, 'public-DraftEditor-content')] | //div[@contenteditable='true' and @role='textbox'] | //div[contains(@class, 'caption-editor')]"
+
+	mention_box = "//div[contains(@class, 'mention-list-popover')]"
+	mention_box_user_id = "//span[contains(@class, 'user-id')]"
+
+	post = "//button[@data-e2e='post_video_button']"
+	post_now = "//button[.//div[text()='Post now']]"
+	post_confirmation = "//div[contains(text(), 'Your video has been uploaded') or contains(text(), '视频已发布') or contains(text(), 'Video published')]"
+
+	[selectors.upload.cookies_banner]
+		banner = "tiktok-cookie-banner"
+		button = "div.button-wrapper"
